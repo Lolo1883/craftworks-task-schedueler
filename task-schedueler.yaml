@@ -1,0 +1,183 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Task-Schedueler server."
+  version: "1.0.0"
+  title: "Swagger Task-Schedueler"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "hammad.mohamed1893@gmail.com"
+host: "api"
+basePath: "/v1"
+tags:
+- name: "task"
+  description: "All properties of an automatic or manual task"
+  
+schemes:
+- "https"
+- "http"
+paths:
+  /tasks:
+    post:
+      tags:
+      - "task"
+      summary: "Add a new manual task to the db (queue)"
+      description: ""
+      operationId: "addManualTask"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Task object that needs to be added to the queue"
+        required: true
+        schema:
+          $ref: "#/definitions/Task"
+      responses:
+        "200":
+          description: "Task created and added to queue"
+        "405":
+          description: "Invalid input"
+      
+    delete:
+      tags:
+      - "task"
+      summary: "Delete all the tasks in db (queue)"
+      description: ""
+      operationId: "deleteAllTasks"
+      
+      produces:
+      - "application/json"
+      
+      responses:
+        "200":
+          description: "all tasks deleted successfully"
+        "500":
+          description: "server error while deleting"
+      
+  /tasks/process:
+    get:
+      tags:
+      - "task"
+      summary: "Process all tasks in the queue"
+      description: "It processes the tasks in the db by their creation date order"
+      operationId: "processAllTasks"
+      produces:
+      - "string"
+      
+      responses:
+        "200":
+          description: "------------------Processing Results------------------ No. of Processed Tasks: xx No. of Left out Tasks: xx ------------------END Processing Results------------------"
+        "500":
+          description: "server error while processing tasks"
+
+  /tasks/{id}:
+    get:
+      tags:
+      - "task"
+      summary: "Find task by ID"
+      description: "Returns a single task"
+      operationId: "getTaskById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of task to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Task"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Task not found"
+
+    post:
+      tags:
+      - "task"
+      summary: "Updates a task in the queue with input data"
+      description: ""
+      operationId: "updatePet"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID of pet that needs to be updated"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "405":
+          description: "Invalid input"
+      
+    delete:
+      tags:
+      - "task"
+      summary: "Deletes a task"
+      description: ""
+      operationId: "deleteTask"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Task id to delete"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        "200":
+          description: "task-deleted true"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Task not found"
+      
+
+definitions:
+  Task:
+    type: "object"
+    required:
+    - "name"
+    - "photoUrls"
+    properties:
+      task_id:
+        type: "integer"
+      title:
+        type: "string"
+      description: 
+        type: "string"
+      priority:
+        type: "integer"
+      status:
+        type: "string"
+      updatedAt:
+        type: "string"
+        format: "yyyy-MM-dd hh:mm:ss"
+        example: "2022-06-13 07:38:04"
+      createdAt:
+        type: "string"
+        format: "yyyy-MM-dd hh:mm:ss"
+        example: "2022-06-13 07:38:04"
+      resolvedAt:
+        type: "string"
+        format: "yyyy-MM-dd hh:mm:ss"
+        example: "2022-06-13 07:38:04"
+      dueDate:
+        type: "string"
+        format: "yyyy-MM-dd"
+        example: "2022-06-14"
+        
+    
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
